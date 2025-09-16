@@ -34,4 +34,17 @@ public class BCP {
 	String[] getInstructions() { return instructions; }
 	int getWaitTime() { return waitTime; }
 
+	void increaseProgramCounter() { programCounter++; }
+	void decreaseWaitTime() { waitTime--; }
+
+	void dict() {
+		System.out.println("DICT "+programName);
+		System.out.println("State: "+state);
+		System.out.println("Program Counter: "+programCounter);
+		System.out.println("Register X: "+registerX);
+		System.out.println("Register Y: "+registerY);
+		System.out.println("Instructions:");
+		for(String instruction : instructions) System.out.println("\t-"+instruction);
+		System.out.println("Waiting Time: "+waitTime);
+	}
 }
