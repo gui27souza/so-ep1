@@ -17,6 +17,7 @@ public class Escalonador {
 		Escalonador escalonador = new Escalonador();
 
 		escalonador.loadPrograms();
+		escalonador.execute();
 	}
 
 	public Escalonador() {
@@ -66,6 +67,62 @@ public class Escalonador {
 					}
 				}
 			}
+		}
+	}
+
+	public void execute() {
+
+		while (!readyQueue.isEmpty() || !blockedQueue.isEmpty()) {
+
+			BCP currentProcess = readyQueue.poll();
+			boolean processEnded = false;
+
+			if (currentProcess != null) {
+				currentProcess.setState(EstadoProcesso.EXECUTANDO);
+				for (int i = 0; i < quantum; i++) {
+
+					String currentInstruction = currentProcess.getInstructions()[currentProcess.getProgramCounter()];
+
+					if (currentInstruction.startsWith("X=")) {
+						int registerValue = Integer.parseInt(currentInstruction.substring(2));
+						currentProcess.setRegisterX(registerValue);
+						currentProcess.increaseProgramCounter();
+					} else if (currentInstruction.startsWith("Y=")) {
+						int registerValue = Integer.parseInt(currentInstruction.substring(2));
+						currentProcess.setRegisterY(registerValue);
+						currentProcess.increaseProgramCounter();
+					} else if (currentInstruction.equals("COM")) {
+						currentProcess.increaseProgramCounter();
+					} else if (currentInstruction.equals("E/S")) {
+						currentProcess.setState(EstadoProcesso.BLOQUEADO);
+						currentProcess.setWaitTime(2);
+						blockedQueue.add(currentProcess);
+						currentProcess.increaseProgramCounter();
+						break;
+					} else if (currentInstruction.equals("SAIDA")) {
+						proccessTables.remove(currentProcess);
+						processEnded = true;
+						break;
+					}
+				}
+
+				if (!processEnded && currentProcess.getState() == EstadoProcesso.EXECUTANDO) {
+					currentProcess.setState(EstadoProcesso.PRONTO);
+					readyQueue.add(currentProcess);
+				}
+			}
+
+			Iterator<BCP> iterator = blockedQueue.iterator();
+			while (iterator.hasNext()) {
+				BCP processoBloqueado = iterator.next();
+				processoBloqueado.decreaseWaitTime();
+				if (processoBloqueado.getWaitTime() <= 0) {
+					processoBloqueado.setState(EstadoProcesso.PRONTO);
+					readyQueue.add(processoBloqueado);
+					iterator.remove();
+				}
+			}
+
 		}
 	}
 
