@@ -17,7 +17,6 @@ public class BlockedQueue {
         queue.add(process);
     }
 
-    // Atualiza processos bloqueados e retorna à fila de prontos
     public void updateReadyQueue(ReadyQueue readyQueue) {
         Iterator<BCP> iterator = queue.iterator();
         while (iterator.hasNext()) {

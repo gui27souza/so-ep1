@@ -1,79 +1,50 @@
 package com.escalonador.core;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Scanner;
-
 import com.escalonador.model.BCP;
 import com.escalonador.util.EstadoProcesso;
-import com.escalonador.queue.*;
-
+import com.escalonador.model.TabelaProcessos;
+import com.escalonador.queue.BlockedQueue;
+import com.escalonador.queue.ReadyQueue;
+import com.escalonador.util.ProgramLoader;
+import java.util.List;
 
 public class Escalonador {
 
-    private ArrayList<BCP> proccessTables;
+    private TabelaProcessos tabelaProcessos;
     private ReadyQueue readyQueue;
     private BlockedQueue blockedQueue;
     private int quantum;
 
-    public static void main(String[] args) {
-        Escalonador escalonador = new Escalonador();
-        escalonador.loadPrograms();
-        escalonador.execute();
-    }
-
     public Escalonador() {
-        this.proccessTables = new ArrayList<>();
+        ProgramLoader loader = new ProgramLoader();
+        loader.carregarTudo();
+
+        this.quantum = loader.getQuantum();
+        List<BCP> processosCarregados = loader.getProcessos();
+
+        this.tabelaProcessos = new TabelaProcessos();
         this.readyQueue = new ReadyQueue();
         this.blockedQueue = new BlockedQueue();
-    }
 
-    public void loadPrograms() {
-        File programsDirectory = new File("programas");
-        File[] programFiles = programsDirectory.listFiles();
-
-        if (programFiles != null) {
-            ArrayList<File> filesList = new ArrayList<>(Arrays.asList(programFiles));
-            filesList.sort(Comparator.comparing(File::getName));
-
-            for (File file : filesList) {
-                if (file.isFile() && file.getName().endsWith(".txt")) {
-                    try (Scanner scanner = new Scanner(file)) {
-
-                        if (file.getName().equals("quantum.txt")) {
-                            this.quantum = Integer.parseInt(scanner.nextLine());
-                        } else {
-
-                            String programName = scanner.nextLine();
-                            ArrayList<String> instructions = new ArrayList<>();
-                            while (scanner.hasNextLine()) {
-                                instructions.add(scanner.nextLine());
-                            }
-
-                            BCP newBCP = new BCP();
-                            newBCP.setProgramName(programName);
-                            newBCP.setInstructions(instructions.toArray(new String[0]));
-
-                            proccessTables.add(newBCP);
-                            readyQueue.add(newBCP); // adiciona na fila de prontos
-                        }
-
-                        System.out.println("Arquivo " + file.getName() + " lido com sucesso!");
-
-                    } catch (FileNotFoundException e) {
-                        System.err.println("Arquivo não encontrado: " + file.getName());
-                    }
-                }
-            }
+        for (BCP processo : processosCarregados) {
+            tabelaProcessos.addProcess(processo);
+            readyQueue.add(processo);
+            System.out.println("Arquivo " + processo.getProgramName() + " carregado.");
         }
     }
 
-    // Round Robin
+    public static void main(String[] args) {
+        Escalonador escalonador = new Escalonador();
+        escalonador.execute();
+    }
+
     public void execute() {
         while (!readyQueue.isEmpty() || !blockedQueue.isEmpty()) {
+
+            if (readyQueue.isEmpty()) {
+                blockedQueue.updateReadyQueue(readyQueue);
+                continue;
+            }
 
             BCP currentProcess = readyQueue.poll();
             boolean processEnded = false;
@@ -82,6 +53,11 @@ public class Escalonador {
                 currentProcess.setState(EstadoProcesso.EXECUTANDO);
 
                 for (int i = 0; i < quantum; i++) {
+                    if (currentProcess.getProgramCounter() >= currentProcess.getInstructions().length) {
+                        processEnded = true;
+                        break;
+                    }
+
                     String currentInstruction = currentProcess.getInstructions()[currentProcess.getProgramCounter()];
 
                     if (currentInstruction.startsWith("X=")) {
@@ -101,7 +77,7 @@ public class Escalonador {
                         currentProcess.increaseProgramCounter();
                         break;
                     } else if (currentInstruction.equals("SAIDA")) {
-                        proccessTables.remove(currentProcess);
+                        tabelaProcessos.removeProcess(currentProcess);
                         processEnded = true;
                         break;
                     }
@@ -115,5 +91,6 @@ public class Escalonador {
 
             blockedQueue.updateReadyQueue(readyQueue);
         }
+        System.out.println("Execução finalizada.");
     }
 }

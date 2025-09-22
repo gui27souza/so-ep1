@@ -22,26 +22,70 @@ public class BCP {
     }
 
     // Getters
-    public String getProgramName() { return programName; }
-    public EstadoProcesso getState() { return state; }
-    public int getProgramCounter() { return programCounter; }
-    public int getRegisterX() { return registerX; }
-    public int getRegisterY() { return registerY; }
-    public String[] getInstructions() { return instructions; }
-    public int getWaitTime() { return waitTime; }
+    public String getProgramName() {
+        return programName;
+    }
+
+    public EstadoProcesso getState() {
+        return state;
+    }
+
+    public int getProgramCounter() {
+        return programCounter;
+    }
+
+    public int getRegisterX() {
+        return registerX;
+    }
+
+    public int getRegisterY() {
+        return registerY;
+    }
+
+    public String[] getInstructions() {
+        return instructions;
+    }
+
+    public int getWaitTime() {
+        return waitTime;
+    }
 
     // Setters
-    public void setProgramName(String programName) { this.programName = programName; }
-    public void setState(EstadoProcesso state) { this.state = state; }
-    public void setProgramCounter(int programCounter) { this.programCounter = programCounter; }
-    public void setRegisterX(int registerX) { this.registerX = registerX; }
-    public void setRegisterY(int registerY) { this.registerY = registerY; }
-    public void setInstructions(String[] instructions) { this.instructions = instructions; }
-    public void setWaitTime(int waitTime) { this.waitTime = waitTime; }
+    public void setProgramName(String programName) {
+        this.programName = programName;
+    }
 
-    // Métodos utilitários
-    public void increaseProgramCounter() { programCounter++; }
-    public void decreaseWaitTime() { waitTime--; }
+    public void setState(EstadoProcesso state) {
+        this.state = state;
+    }
+
+    public void setProgramCounter(int programCounter) {
+        this.programCounter = programCounter;
+    }
+
+    public void setRegisterX(int registerX) {
+        this.registerX = registerX;
+    }
+
+    public void setRegisterY(int registerY) {
+        this.registerY = registerY;
+    }
+
+    public void setInstructions(String[] instructions) {
+        this.instructions = instructions;
+    }
+
+    public void setWaitTime(int waitTime) {
+        this.waitTime = waitTime;
+    }
+
+    public void increaseProgramCounter() {
+        programCounter++;
+    }
+
+    public void decreaseWaitTime() {
+        waitTime--;
+    }
 
     public void dict() {
         System.out.println("DICT " + programName);
@@ -56,4 +100,3 @@ public class BCP {
         System.out.println("Waiting Time: " + waitTime);
     }
 }
-
