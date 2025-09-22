@@ -1,4 +1,4 @@
-package com.escalonador.util;
+package com.escalonador.core;
 
 import com.escalonador.model.BCP;
 import java.io.File;

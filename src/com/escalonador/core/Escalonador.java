@@ -5,7 +5,7 @@ import com.escalonador.util.EstadoProcesso;
 import com.escalonador.model.TabelaProcessos;
 import com.escalonador.queue.BlockedQueue;
 import com.escalonador.queue.ReadyQueue;
-import com.escalonador.util.ProgramLoader;
+import com.escalonador.core.ProgramLoader;
 import java.util.List;
 
 public class Escalonador {
