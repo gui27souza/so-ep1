@@ -19,20 +19,35 @@ public class ProgramLoader {
         this.processos = new ArrayList<>();
     }
 
-    public void carregarTudo() {
-        carregarQuantum();
+    public void carregarTudo(String quantumArg) {
+        carregarQuantum(quantumArg);
         carregarProcessos();
     }
 
-    private void carregarQuantum() {
+    private void carregarQuantum(String quantumArg) {
+
+				if (quantumArg != null) {
+						try {
+								this.quantum = Integer.parseInt(quantumArg.trim());
+								System.out.println("Quantum definido via CLI: " + this.quantum);
+								return;
+						} catch (NumberFormatException e) {
+								System.err.println("Aviso: Valor de quantum da CLI inválido. Tentando ler de arquivo...");
+						}
+				}
+
         try (Scanner scanner = new Scanner(new File(DIRETORIO_PROGRAMAS + "/quantum.txt"))) {
             if (scanner.hasNextLine()) {
                 this.quantum = Integer.parseInt(scanner.nextLine());
+								System.out.println("Quantum definido via arquivo: " + this.quantum);
             }
-        } catch (FileNotFoundException e) {
-            System.err.println("Erro: quantum.txt não encontrado. Usando quantum = 1.");
-            this.quantum = 1;
-        }
+				} catch (FileNotFoundException e) {
+					System.err.println("Erro: quantum.txt não encontrado. Usando quantum = 1.");
+					this.quantum = 1;
+				} catch (NumberFormatException e) {
+					System.err.println("Erro: Conteúdo inválido em quantum.txt. Usando quantum = 1.");
+					this.quantum = 1;
+				}
     }
 
     private void carregarProcessos() {

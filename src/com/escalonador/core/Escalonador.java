@@ -21,9 +21,10 @@ public class Escalonador {
     private int totalInstrucoes;
     private int totalQuantuns;
     
-    public Escalonador() {
-        ProgramLoader loader = new ProgramLoader();
-        loader.carregarTudo();
+    public Escalonador(String[] args) {
+				ProgramLoader loader = new ProgramLoader();
+				String quantumArg = (args.length > 0) ? args[0] : null;
+        loader.carregarTudo(quantumArg);
 
         this.quantum = loader.getQuantum();
         List<BCP> processosCarregados = loader.getProcessos();
@@ -46,7 +47,7 @@ public class Escalonador {
     }
 
     public static void main(String[] args) {
-        Escalonador escalonador = new Escalonador();
+        Escalonador escalonador = new Escalonador(args);
         escalonador.execute();
     }
 
