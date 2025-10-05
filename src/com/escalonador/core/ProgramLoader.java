@@ -59,7 +59,7 @@ public class ProgramLoader {
             listaArquivos.sort(Comparator.comparing(File::getName));
 
             for (File arquivo : listaArquivos) {
-                if (arquivo.isFile() && !arquivo.getName().equals("quantum.txt")) {
+                if (isValidProgramFile(arquivo)) {
                     try (Scanner scanner = new Scanner(arquivo)) {
                         String programName = scanner.nextLine();
                         ArrayList<String> instructions = new ArrayList<>();
@@ -80,6 +80,25 @@ public class ProgramLoader {
             }
         }
     }
+		private boolean isValidProgramFile(File arquivo) {
+
+			int fileNumber;
+			try {
+				fileNumber = Integer.parseInt(arquivo.getName().substring(0, 2));
+			} catch (NumberFormatException e) {
+				return false;
+			}
+
+			boolean isValidFileNumber = (fileNumber > 0 && fileNumber <= 10);
+
+			return (
+				arquivo.isFile() &&
+				arquivo.getName().endsWith(".txt") &&
+				!arquivo.getName().equals("quantum.txt") &&
+				arquivo.getName().length() == 6 &&
+					isValidFileNumber
+			);
+		}
 
     public int getQuantum() {
         return this.quantum;
