@@ -101,5 +101,5 @@ Executando TESTE-5
 TESTE-5 terminado. X=8. Y=5
 ------------------------------------------
 MEDIA DE TROCAS: 4.4
-MEDIA DE INSTRUCOES: 3.159090909090909
+MEDIA DE INSTRUCOES: 3.16
 QUANTUM: 5

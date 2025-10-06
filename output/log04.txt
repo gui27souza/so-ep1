@@ -117,5 +117,5 @@ Executando TESTE-2
 TESTE-2 terminado. X=9. Y=1
 ------------------------------------------
 MEDIA DE TROCAS: 5.2
-MEDIA DE INSTRUCOES: 2.673076923076923
+MEDIA DE INSTRUCOES: 2.67
 QUANTUM: 4
