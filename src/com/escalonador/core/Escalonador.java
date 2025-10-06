@@ -125,8 +125,8 @@ public class Escalonador {
         
         // Log das estatísticas finais
         logger.log("------------------------------------------");
-        double mediaTrocas = (double) totalTrocas / numProcessosIniciais;
-        double mediaInstrucoes = (double) totalInstrucoes / totalQuantuns;
+        double mediaTrocas = Math.round(((double) totalTrocas / numProcessosIniciais) * 100.0) / 100.0;
+        double mediaInstrucoes = Math.round(((double) totalInstrucoes / totalQuantuns) * 100.0) / 100.0;
         logger.log("MEDIA DE TROCAS: " + mediaTrocas);
         logger.log("MEDIA DE INSTRUCOES: " + mediaInstrucoes);
         logger.log("QUANTUM: " + quantum);
