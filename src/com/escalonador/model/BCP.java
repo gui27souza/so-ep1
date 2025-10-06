@@ -12,12 +12,15 @@ public class BCP {
     private String[] instructions;
     private int waitTime;
 
+		public final int maxInstructions = 21;
+
     // Construtor
     public BCP() {
         this.state = EstadoProcesso.PRONTO;
         this.programCounter = 0;
         this.registerX = 0;
         this.registerY = 0;
+				this.instructions = new String[maxInstructions];
         this.waitTime = 0;
     }
 
@@ -49,6 +52,10 @@ public class BCP {
     public int getWaitTime() {
         return waitTime;
     }
+
+		public int getMaxInstructions() {
+			return maxInstructions;
+		}
 
     // Setters
     public void setProgramName(String programName) {

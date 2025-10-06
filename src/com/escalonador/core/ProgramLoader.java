@@ -3,11 +3,7 @@ package com.escalonador.core;
 import com.escalonador.model.BCP;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class ProgramLoader {
 
@@ -60,22 +56,35 @@ public class ProgramLoader {
 
             for (File arquivo : listaArquivos) {
                 if (isValidProgramFile(arquivo)) {
-                    try (Scanner scanner = new Scanner(arquivo)) {
-                        String programName = scanner.nextLine();
-                        ArrayList<String> instructions = new ArrayList<>();
-                        while (scanner.hasNextLine()) {
-                            instructions.add(scanner.nextLine());
-                        }
+									try (Scanner scanner = new Scanner(arquivo)) {
 
-                        BCP newBCP = new BCP();
-                        newBCP.setProgramName(programName);
-                        newBCP.setInstructions(instructions.toArray(new String[0]));
+										BCP newBCP = new BCP();
+										int BCPMaxInstructions = newBCP.getMaxInstructions();
+										List<String> instructionsList = new ArrayList<>();
+										String programName = scanner.nextLine();
 
-                        this.processos.add(newBCP);
+										while (scanner.hasNextLine() && instructionsList.size() < BCPMaxInstructions) {
+											instructionsList.add(scanner.nextLine());
+										}
 
-                    } catch (FileNotFoundException e) {
-                        System.err.println("Arquivo não encontrado: " + arquivo.getName());
-                    }
+										if (scanner.hasNextLine()) {
+											throw new IllegalArgumentException("Erro: O arquivo " + arquivo.getName() + " excede o limite de " + BCPMaxInstructions + " comandos.");
+										}
+
+										if (instructionsList.isEmpty() || !instructionsList.get(instructionsList.size() - 1).equals("SAIDA")) {
+											throw new IllegalArgumentException("Erro: O arquivo " + arquivo.getName() + " não termina com a instrução SAIDA.");
+										}
+
+										newBCP.setProgramName(programName);
+										newBCP.setInstructions(instructionsList.toArray(new String[0]));
+
+										this.processos.add(newBCP);
+
+									} catch (FileNotFoundException e) {
+										System.err.println("Erro: Arquivo " + arquivo.getName() + " não encontrado.");
+									} catch (IllegalArgumentException e) {
+										System.err.println(e.getMessage());
+									}
                 }
             }
         }
@@ -96,7 +105,7 @@ public class ProgramLoader {
 				arquivo.getName().endsWith(".txt") &&
 				!arquivo.getName().equals("quantum.txt") &&
 				arquivo.getName().length() == 6 &&
-					isValidFileNumber
+				isValidFileNumber
 			);
 		}
 
