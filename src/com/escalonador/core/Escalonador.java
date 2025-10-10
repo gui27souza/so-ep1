@@ -5,7 +5,6 @@ import com.escalonador.model.TabelaProcessos;
 import com.escalonador.queue.BlockedQueue;
 import com.escalonador.queue.ReadyQueue;
 import com.escalonador.util.EstadoProcesso;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -101,6 +100,7 @@ public class Escalonador {
                         // Não faz nada além de contar a instrução
                     } else if (currentInstruction.equals("E/S")) {
                         logger.log("E/S iniciada em " + currentProcess.getProgramName());
+                        logger.log("Interrompendo " + currentProcess.getProgramName() + " após " + instrucoesExecutadasNoQuantum + " instruções");
                         currentProcess.setState(EstadoProcesso.BLOQUEADO);
                         currentProcess.setWaitTime(2); // tempo de espera de 2 quanta
                         blockedQueue.add(currentProcess);

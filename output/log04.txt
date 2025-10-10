@@ -19,28 +19,37 @@ Executando TESTE-3
 Interrompendo TESTE-3 após 4 instruções
 Executando TESTE-4
 E/S iniciada em TESTE-4
+Interrompendo TESTE-4 após 2 instruções
 Executando TESTE-5
 E/S iniciada em TESTE-5
+Interrompendo TESTE-5 após 2 instruções
 Executando TESTE-6
 E/S iniciada em TESTE-6
+Interrompendo TESTE-6 após 4 instruções
 Executando TESTE-7
 E/S iniciada em TESTE-7
+Interrompendo TESTE-7 após 4 instruções
 Executando TESTE-8
 Interrompendo TESTE-8 após 4 instruções
 Executando TESTE-9
 E/S iniciada em TESTE-9
+Interrompendo TESTE-9 após 3 instruções
 Executando TESTE-10
 Interrompendo TESTE-10 após 4 instruções
 Executando TESTE-1
 E/S iniciada em TESTE-1
+Interrompendo TESTE-1 após 1 instruções
 Executando TESTE-2
 E/S iniciada em TESTE-2
+Interrompendo TESTE-2 após 1 instruções
 Executando TESTE-3
 Interrompendo TESTE-3 após 4 instruções
 Executando TESTE-4
 E/S iniciada em TESTE-4
+Interrompendo TESTE-4 após 2 instruções
 Executando TESTE-5
 E/S iniciada em TESTE-5
+Interrompendo TESTE-5 após 2 instruções
 Executando TESTE-6
 Interrompendo TESTE-6 após 4 instruções
 Executando TESTE-8
@@ -49,20 +58,25 @@ Executando TESTE-7
 Interrompendo TESTE-7 após 4 instruções
 Executando TESTE-10
 E/S iniciada em TESTE-10
+Interrompendo TESTE-10 após 1 instruções
 Executando TESTE-9
 Interrompendo TESTE-9 após 4 instruções
 Executando TESTE-1
 E/S iniciada em TESTE-1
+Interrompendo TESTE-1 após 4 instruções
 Executando TESTE-3
 Interrompendo TESTE-3 após 4 instruções
 Executando TESTE-2
 Interrompendo TESTE-2 após 4 instruções
 Executando TESTE-4
 E/S iniciada em TESTE-4
+Interrompendo TESTE-4 após 2 instruções
 Executando TESTE-6
 E/S iniciada em TESTE-6
+Interrompendo TESTE-6 após 3 instruções
 Executando TESTE-5
 E/S iniciada em TESTE-5
+Interrompendo TESTE-5 após 2 instruções
 Executando TESTE-8
 Interrompendo TESTE-8 após 4 instruções
 Executando TESTE-7
@@ -77,32 +91,41 @@ Executando TESTE-1
 TESTE-1 terminado. X=2. Y=10
 Executando TESTE-2
 E/S iniciada em TESTE-2
+Interrompendo TESTE-2 após 1 instruções
 Executando TESTE-4
 E/S iniciada em TESTE-4
+Interrompendo TESTE-4 após 2 instruções
 Executando TESTE-6
 E/S iniciada em TESTE-6
+Interrompendo TESTE-6 após 3 instruções
 Executando TESTE-8
 Interrompendo TESTE-8 após 4 instruções
 Executando TESTE-5
 E/S iniciada em TESTE-5
+Interrompendo TESTE-5 após 2 instruções
 Executando TESTE-7
 E/S iniciada em TESTE-7
+Interrompendo TESTE-7 após 1 instruções
 Executando TESTE-9
 E/S iniciada em TESTE-9
+Interrompendo TESTE-9 após 3 instruções
 Executando TESTE-2
 Interrompendo TESTE-2 após 4 instruções
 Executando TESTE-4
 E/S iniciada em TESTE-4
+Interrompendo TESTE-4 após 3 instruções
 Executando TESTE-8
 Interrompendo TESTE-8 após 4 instruções
 Executando TESTE-6
 TESTE-6 terminado. X=8. Y=5
 Executando TESTE-5
 E/S iniciada em TESTE-5
+Interrompendo TESTE-5 após 2 instruções
 Executando TESTE-7
 TESTE-7 terminado. X=12. Y=3
 Executando TESTE-2
 E/S iniciada em TESTE-2
+Interrompendo TESTE-2 após 1 instruções
 Executando TESTE-9
 TESTE-9 terminado. X=0. Y=0
 Executando TESTE-8
@@ -119,3 +142,16 @@ TESTE-2 terminado. X=9. Y=1
 MEDIA DE TROCAS: 5.2
 MEDIA DE INSTRUCOES: 2.67
 QUANTUM: 4
+------------------------------------------
+--- ESTATISTICAS DE TURNAROUND ---
+Processo: TESTE-1 | Turnaround: 32 ciclos.
+Processo: TESTE-10 | Turnaround: 30 ciclos.
+Processo: TESTE-2 | Turnaround: 52 ciclos.
+Processo: TESTE-3 | Turnaround: 31 ciclos.
+Processo: TESTE-4 | Turnaround: 49 ciclos.
+Processo: TESTE-5 | Turnaround: 50 ciclos.
+Processo: TESTE-6 | Turnaround: 43 ciclos.
+Processo: TESTE-7 | Turnaround: 45 ciclos.
+Processo: TESTE-8 | Turnaround: 48 ciclos.
+Processo: TESTE-9 | Turnaround: 47 ciclos.
+MEDIA DE TURNAROUND: 42.7
