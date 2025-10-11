@@ -8,7 +8,7 @@ import java.io.PrintWriter;
 public class Logger {
     
     private PrintWriter printWriter;
-		private String outputDirectory = "output";
+	private String outputDirectory = "output";
 
 	public Logger(int quantum) {
 		String quantumFormatado = String.format("%02d", quantum);

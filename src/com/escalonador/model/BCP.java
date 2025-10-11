@@ -127,12 +127,12 @@ public class BCP {
         }
         System.out.println("Waiting Time: " + waitTime);
     }
-
-    // Função que calcula o turnaround
+    
     public int getTurnaround() {
         if (this.completionTime >= 0) {
             return this.completionTime - this.arrivalTime;
         }
-        return -1; // Retorna -1 se o processo não foi concluído
+        // Retorna -1 se o processo não foi concluído
+        return -1; 
     }
 }

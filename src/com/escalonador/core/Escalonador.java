@@ -19,7 +19,6 @@ public class Escalonador {
     private int numProcessosIniciais;
     private List<BCP> processosFinalizados;
     
-    // Variáveis para as estatísticas
     private int totalTrocas;
     private int totalInstrucoes;
     private int totalQuantuns;
@@ -33,12 +32,11 @@ public class Escalonador {
         List<BCP> processosCarregados = loader.getProcessos();
         this.processosFinalizados = new ArrayList<>();
 
-
         this.logger = new Logger(this.quantum);
         this.tabelaProcessos = new TabelaProcessos();
         this.readyQueue = new ReadyQueue();
         this.blockedQueue = new BlockedQueue();
-        numProcessosIniciais = processosCarregados.size();
+        this.numProcessosIniciais = processosCarregados.size();
 
         logger.log("Quantum = " + this.quantum);
         logger.log("------------------------------------------");
@@ -48,6 +46,7 @@ public class Escalonador {
             readyQueue.add(processo);
             logger.log("Carregando " + processo.getProgramName());
         }
+
         logger.log("------------------------------------------");
     }
 
@@ -60,13 +59,9 @@ public class Escalonador {
         while (!readyQueue.isEmpty() || !blockedQueue.isEmpty()) {
 
             if (readyQueue.isEmpty()) {
-                // Se a fila de prontos estiver vazia, atualiza a fila de bloqueados
+                // Atualiza fila de prontos com processos desbloqueados
                 blockedQueue.updateReadyQueue(readyQueue);
                 continue;
-                // if (readyQueue.isEmpty()) {
-                //     // Se a fila de prontos continuar vazia, espera até que um processo seja desbloqueado
-                //     continue; 
-                // }
             }
 
             BCP currentProcess = readyQueue.poll();
@@ -76,44 +71,49 @@ public class Escalonador {
             if (currentProcess != null) {
                 logger.log("Executando " + currentProcess.getProgramName());
                 currentProcess.setState(EstadoProcesso.EXECUTANDO);
-                
-                // Incrementa o contador de trocas de contexto
+
+                // Conta troca de contexto
                 totalTrocas++;
                 
                 for (int i = 0; i < quantum; i++) {
-                    // Verifica se chegou ao fim do programa
+                    // Verifica fim do programa
                     if (currentProcess.getProgramCounter() >= currentProcess.getInstructions().length) {
                         processEnded = true;
                         break;
                     }
 
-                    String currentInstruction = currentProcess.getInstructions()[currentProcess.getProgramCounter()];
+                    String instrucao = currentProcess.getInstructions()[currentProcess.getProgramCounter()];
                     instrucoesExecutadasNoQuantum++;
 
-                    if (currentInstruction.startsWith("X=")) {
-                        int registerValue = Integer.parseInt(currentInstruction.substring(2));
-                        currentProcess.setRegisterX(registerValue);
-                    } else if (currentInstruction.startsWith("Y=")) {
-                        int registerValue = Integer.parseInt(currentInstruction.substring(2));
-                        currentProcess.setRegisterY(registerValue);
-                    } else if (currentInstruction.equals("COM")) {
-                        // Não faz nada além de contar a instrução
-                    } else if (currentInstruction.equals("E/S")) {
-                        logger.log("E/S iniciada em " + currentProcess.getProgramName());
-                        logger.log("Interrompendo " + currentProcess.getProgramName() + " após " + instrucoesExecutadasNoQuantum + " instruções");
-                        currentProcess.setState(EstadoProcesso.BLOQUEADO);
-                        currentProcess.setWaitTime(2); // tempo de espera de 2 quanta
-                        blockedQueue.add(currentProcess);
-                        currentProcess.increaseProgramCounter();
-                        break;
-                    } else if (currentInstruction.equals("SAIDA")) {
-                        logger.log(currentProcess.getProgramName() + " terminado. X=" + currentProcess.getRegisterX() + ". Y=" + currentProcess.getRegisterY());
-                        currentProcess.setCompletionTime(totalQuantuns + 1); // Registra o ciclo atual como tempo de conclusão
-                        processosFinalizados.add(currentProcess); // Adiciona à lista de finalizados
-                        tabelaProcessos.removeProcess(currentProcess);
-                        processEnded = true;
-                        break;
+                    switch (instrucao) {
+                        case "COM":
+                            // Apenas conta instrução
+                            break;
+                        case "E/S":
+                            logger.log("E/S iniciada em " + currentProcess.getProgramName());
+                            logger.log("Interrompendo " + currentProcess.getProgramName() + " após " + instrucoesExecutadasNoQuantum + " instruções");
+                            currentProcess.setState(EstadoProcesso.BLOQUEADO);
+                            currentProcess.setWaitTime(2); // 2 quanta de espera
+                            blockedQueue.add(currentProcess);
+                            currentProcess.increaseProgramCounter();
+                            break;
+                        case "SAIDA":
+                            logger.log(currentProcess.getProgramName() + " terminado. X=" + currentProcess.getRegisterX() + ". Y=" + currentProcess.getRegisterY());
+                            currentProcess.setCompletionTime(totalQuantuns + 1); // ciclo atual como tempo de conclusão
+                            processosFinalizados.add(currentProcess);
+                            tabelaProcessos.removeProcess(currentProcess);
+                            processEnded = true;
+                            break;
+                        default:
+                            if (instrucao.startsWith("X=")) {
+                                currentProcess.setRegisterX(Integer.parseInt(instrucao.substring(2)));
+                            } else if (instrucao.startsWith("Y=")) {
+                                currentProcess.setRegisterY(Integer.parseInt(instrucao.substring(2)));
+                            }
+                            break;
                     }
+
+                    if (instrucao.equals("E/S") || instrucao.equals("SAIDA")) break;
                     currentProcess.increaseProgramCounter();
                 }
 
@@ -128,10 +128,9 @@ public class Escalonador {
 
                 blockedQueue.updateReadyQueue(readyQueue);
             }
-
         }
         
-        // Log das estatísticas finais
+        // Estatísticas finais
         logger.log("------------------------------------------");
         double mediaTrocas = Math.round(((double) totalTrocas / numProcessosIniciais) * 100.0) / 100.0;
         double mediaInstrucoes = Math.round(((double) totalInstrucoes / totalQuantuns) * 100.0) / 100.0;
@@ -144,16 +143,12 @@ public class Escalonador {
     }
 
     public void logTurnaroundStatistics() {
-        if (processosFinalizados.isEmpty()) {
-            return; // Não faz nada se nenhum processo terminou
-        }
+        if (processosFinalizados.isEmpty()) return;
 
         logger.log("------------------------------------------");
         logger.log("--- ESTATISTICAS DE TURNAROUND ---");
 
         double somaTurnaround = 0;
-
-        // Ordena a lista de processos finalizados pelo nome para um log mais organizado
         processosFinalizados.sort(Comparator.comparing(BCP::getProgramName));
 
         for (BCP processo : processosFinalizados) {
