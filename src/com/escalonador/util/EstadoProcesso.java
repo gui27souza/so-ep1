@@ -1,4 +1,4 @@
-package com.escalonador;
+package com.escalonador.util;
 
 public enum EstadoProcesso {
 	PRONTO,

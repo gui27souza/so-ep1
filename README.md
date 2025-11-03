@@ -2,11 +2,17 @@
 
 ## Como executar
 
-- Na raíz do repositório (`so-ep1/`) execute o seguinte comando para compilar:
+- Para linux
 ```
-javac -d . src/com/escalonador/*.java
+./run.sh <quantum>
 ```
-- Em seguida, execute o seguinte comando para executar:
+
+- É possível escolher o quantum via CLI, mas caso não seja especificado, será levado em conta o do arquivo
+
+## Como executar os testes de quantum
+
+- Para linux
 ```
-java com.escalonador.Escalonador
+./run_all_quantums.sh
 ```
+- Será executado o programa 10 vezes, passando como parâmetro de quantum de 1 a 10 via CLI
